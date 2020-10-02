@@ -32,6 +32,19 @@ Options:
 ```
 
 ## How To
+### Update the script
+
+First update the local repository using:
+```bash
+git pull origin main
+```
+
+And update the bin file using
+
+```bash
+./rdp -r && ./rdp -i
+```
+
 ### Run the script when a X session is started
 
 Create a script in ```/etc/X11/Xsession.d```.
