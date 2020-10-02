@@ -52,7 +52,7 @@ Create a script in ```/etc/X11/Xsession.d```.
 /etc/X11/Xsession.d/startup-local
 ```bash
 #!/bin/sh
-rdp -md domain.fqdn
+rdp -mkd domain.fqdn
 ```
 
 And make it executable.
