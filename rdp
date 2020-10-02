@@ -48,6 +48,9 @@ Title=""
 help_options="
 -u                     => Set Username
 -p                     => Set Password
+-d                     => Set Domain
+-h                     => Set Host
+-k                     => Enable Persist Mode which relaunches the prompt whenever you close your connection
 -v                     => Enable Debug Mode
                           Input commands sent are stored in ${LOGDIR}
 -i                     => Install Script as Binary
@@ -234,25 +237,30 @@ function Check_Package(){
 
 function Connect(){
 	if [ "$RDPUSER" = "" ]; then
-		RDPUSER=$(yad --fixed --borders=15 --width=400 --class="GSu" --title="Username" --text="Enter username" --entry 2>/dev/null)
+		RUSER=$(yad --fixed --borders=15 --width=400 --class="GSu" --title="Username" --text="Enter username" --entry --button=OK 2>/dev/null)
+	else
+		RUSER=$RDPUSER
 	fi
 	if [ "$RDPPASS" = "" ]; then
-		RDPPASS=$(yad --fixed --borders=15 --width=400 --class="GSu" --title="Password" --text="Enter password for user <b>$RDPUSER</b>:" --entry --hide-text 2>/dev/null)
+		RPASS=$(yad --fixed --borders=15 --width=400 --class="GSu" --title="Password" --text="Enter password for user <b>$RDPUSER</b>:" --entry --hide-text --button=OK 2>/dev/null)
+	else
+		RPASS=$RDPPASS
 	fi
 	if [ "$RDPDN" = "" ]; then
-		RDPDN=$(yad --fixed --borders=15 --width=400 --class="GSu" --title="Domain" --text="Enter domain" --entry 2>/dev/null)
+		RDN=$(yad --fixed --borders=15 --width=400 --class="GSu" --title="Domain" --text="Enter domain" --entry --button=OK 2>/dev/null)
+	else
+		RDN=$RDPDN
 	fi
-	RDPHOST="${RDPUSER}.${RDPDN}"
-  if [ "$0" != "./${scriptname}" ];then
-      RUNDIR="/usr/share/${scriptname}/"
-  else
-      RUNDIR=
-  fi
-	RDP_Options="$RDP_Options /v:$RDPHOST /u:$RDPUSER /p:$RDPPASS"
-	if [ "$(nmap -Pn -p ${RDPPORT} ${RDPHOST} | grep "${RDPPORT}/tcp" | awk '{ print $2 }')" = "open" ]; then
+	if [ "$RDPHOST" = "" ]; then
+		RHOST="${RUSER}.${RDN}"
+	else
+		RHOST=$RDPHOST
+	fi
+	RDP_Options="$RDP_Options /v:$RHOST /u:$RUSER /p:$RPASS /d:$RDN"
+	if [ "$(nmap -Pn -p ${RDPPORT} ${RHOST} | grep "${RDPPORT}/tcp" | awk '{ print $2 }' 2>/dev/null)" = "open" ]; then
 		Executing "xfreerdp /cert-ignore $RDP_Options >/dev/null 2>/dev/null"
 	else
-		yad --fixed --borders=15 --width=600 --image dialog-question --title="Remote Desktop Connection Error" --text="${RDPHOST} is not accepting the connexion" 2>/dev/null
+		yad --fixed --borders=15 --width=600 --image dialog-question --title="Remote Desktop Connection Error" --text="${RHOST} is not accepting the connexion" --button=Close:0 --button=OK 2>/dev/null
 	fi
 }
 
@@ -296,7 +304,7 @@ fi
 
 RDP_Options=
 
-while getopts ":virmd:a:u:p:" option
+while getopts ":virkmd:a:u:p:h:" option
 	do
 	case "${option}"
 		in
@@ -311,14 +319,19 @@ while getopts ":virmd:a:u:p:" option
 			v)
 				DEBUG=true
 				;;
+			k)
+				PERSIST='TRUE'
+				;;
 			u)
 				RDPUSER=$OPTARG
 				;;
 			p)
 				RDPPASS=$OPTARG
 				;;
+			h)
+				RDPHOST=$OPTARG
+				;;
 			d)
-				RDP_Options="$RDP_Options /d:$OPTARG"
 				RDPDN=$OPTARG
 				;;
 			a)
@@ -347,7 +360,17 @@ shift $((OPTIND -1))
 #==============================================================================
 
 if [ "$RUNNING" = "" ]; then
-	Connect
+	if [ "$PERSIST" = "" ]; then
+		Connect
+	else
+		while true; do
+			RHOST=
+			RUSER=
+			RPASS=
+			RDN=
+			Connect && break;
+		done
+	fi
 fi
 
 exit 0
