@@ -23,6 +23,7 @@ Options:
 -d                     => Set Domain
 -h                     => Set Host
 -k                     => Enable Persist Mode which relaunches the prompt whenever you close your connection
+-l                     => Enable Drives Redirection
 -v                     => Enable Debug Mode
                           Input commands sent are stored in log/rdp/
 -i                     => Install Script as Binary
@@ -52,7 +53,7 @@ Create a script in ```/etc/X11/Xsession.d```.
 /etc/X11/Xsession.d/startup-local
 ```bash
 #!/bin/sh
-rdp -mkd domain.fqdn
+rdp -mkld domain.fqdn
 ```
 
 And make it executable.
@@ -68,3 +69,5 @@ chmod 755 /etc/X11/Xsession.d/startup-local
  * [2020-10-01] - Added a persist switch that will specify the script to run in a loop. So whenever a session is closed, the script prompts the GUI again and launches the connection. If the host port is closed, the script will output an error in a dialog box. The OK button will continue the loop while the close button will stop it.
  * [2020-10-01] - Added a host switch if you want to specify a host.
  * [2020-10-01] - Added a some tutorials to setup your thinclient to use the script.
+ * [2020-10-01] - Added a drive redirection switch to enable drive redirections such as USB drives.
+ * [2020-10-01] - Added the output of xfreerdp whenever ```-v``` is used

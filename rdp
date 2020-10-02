@@ -51,6 +51,7 @@ help_options="
 -d                     => Set Domain
 -h                     => Set Host
 -k                     => Enable Persist Mode which relaunches the prompt whenever you close your connection
+-l                     => Enable Drives Redirection
 -v                     => Enable Debug Mode
                           Input commands sent are stored in ${LOGDIR}
 -i                     => Install Script as Binary
@@ -258,7 +259,11 @@ function Connect(){
 	fi
 	RDP_Options="$RDP_Options /v:$RHOST /u:$RUSER /p:$RPASS /d:$RDN"
 	if [ "$(nmap -Pn -p ${RDPPORT} ${RHOST} | grep "${RDPPORT}/tcp" | awk '{ print $2 }' 2>/dev/null)" = "open" ]; then
-		Executing "xfreerdp /cert-ignore $RDP_Options >/dev/null 2>/dev/null"
+		if [ $DEBUG = "true" ]; then
+			Executing "xfreerdp /cert-ignore $RDP_Options"
+		else
+			Executing "xfreerdp /cert-ignore $RDP_Options >/dev/null 2>/dev/null"
+		fi
 	else
 		yad --fixed --borders=15 --width=600 --image dialog-question --title="Remote Desktop Connection Error" --text="${RHOST} is not accepting the connexion" --button=Close:0 --button=OK 2>/dev/null
 	fi
@@ -304,7 +309,7 @@ fi
 
 RDP_Options=
 
-while getopts ":virkmd:a:u:p:h:" option
+while getopts ":virlkmd:a:u:p:h:" option
 	do
 	case "${option}"
 		in
@@ -333,6 +338,9 @@ while getopts ":virkmd:a:u:p:h:" option
 				;;
 			d)
 				RDPDN=$OPTARG
+				;;
+			l)
+				RDP_Options="$RDP_Options /drives"
 				;;
 			a)
 				RDP_Options="$RDP_Options /port:$OPTARG"
