@@ -79,3 +79,4 @@ chmod 755 /etc/X11/Xsession.d/startup-local
  * [2020-10-01] - Added a some tutorials to setup your thinclient to use the script.
  * [2020-10-01] - Added a drive redirection switch to enable drive redirections such as USB drives.
  * [2020-10-01] - Added the output of xfreerdp whenever ```-v``` is used
+ * [2020-10-01] - Added a desktop file to copy on the client's Desktop
