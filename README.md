@@ -52,6 +52,8 @@ From the repository directory execute:
 cp Remote\ Desktop\ Connection.desktop ~/Desktop/Remote\ Desktop\ Connection.desktop
 ```
 
+Then you can edit the parameters (```Exec=rdp -mkl```) of the command using nano.
+
 ### Run the script when a X session is started
 
 Create a script in ```/etc/X11/Xsession.d```.

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Comment[en_CA]=
 Comment=
-Exec=rdp -mkld alb.com
+Exec=rdp -mkl
 GenericName[en_CA]=
 GenericName=
 Icon=system-run
