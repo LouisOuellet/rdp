@@ -4,7 +4,9 @@ This script makes it easy to connect to older iRDP 6 Controllers and provides a 
 
 ## Requirements
 
-All package required can easily be install by running ```./rdp -i```. But you will need to have a DNS server or edit your ```/etc/hosts``` file. The host address is built like so : ${USERNAME}${DOMAIN}. As I initially wrote the script for thinclient use, I wanted to limit the amount of input required for the user while offering secured passwords.
+All package required can easily be install by running ```./rdp -i```. But you will need to have a DNS server or edit your ```/etc/hosts``` file. Because the script relies on DNS Queries to identify the host. The host address is built like so : ${USERNAME}${DOMAIN}.
+
+As I initially wrote the script for thinclient use, I wanted to limit the amount of input required for the user while offering secured passwords.
 
 ## Usage
 
