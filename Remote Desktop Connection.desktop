@@ -1,0 +1,19 @@
+[Desktop Entry]
+Comment[en_CA]=
+Comment=
+Exec=rdp -mkld alb.com
+GenericName[en_CA]=
+GenericName=
+Icon=system-run
+MimeType=
+Name[en_CA]=Remote Desktop Connection
+Name=Remote Desktop Connection
+Path=
+StartupNotify=true
+Terminal=true
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=none
+X-KDE-SubstituteUID=false
+X-KDE-Username=
