@@ -45,6 +45,12 @@ And update the bin file using
 ```bash
 ./rdp -r && ./rdp -i
 ```
+### Add a desktop shorcut
+
+From the repository directory execute:
+```bash
+cp Remote\ Desktop\ Connection.desktop ~/Desktop/Remote\ Desktop\ Connection.desktop
+```
 
 ### Run the script when a X session is started
 
