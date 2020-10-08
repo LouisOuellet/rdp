@@ -45,7 +45,7 @@ And update the bin file using
 ```bash
 ./rdp -r && ./rdp -i
 ```
-### Add a desktop shorcut
+### Add a desktop shortcut
 
 From the repository directory execute:
 ```bash
