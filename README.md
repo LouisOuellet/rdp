@@ -1,6 +1,6 @@
 # RDP
 
-This script makes it easy to connect to older iRDP 6 Controllers and provides a ThinClient experience.
+This script makes it easy to connect to RDP and provides a ThinClient experience by adding a GUI to xfreerdp2.
 
 ## Requirements
 
