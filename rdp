@@ -51,6 +51,7 @@ help_options="
 -d                     => Set Domain
 -h                     => Set Host
 -k                     => Enable Persist Mode which relaunches the prompt whenever you close your connection
+-n                     => Enable Printer Redirection
 -l                     => Enable Drives Redirection
 -v                     => Enable Debug Mode
                           Input commands sent are stored in ${LOGDIR}
@@ -309,7 +310,7 @@ fi
 
 RDP_Options=
 
-while getopts ":virlkmd:a:u:p:h:" option
+while getopts ":virlknmd:a:u:p:h:" option
 	do
 	case "${option}"
 		in
@@ -341,6 +342,9 @@ while getopts ":virlkmd:a:u:p:h:" option
 				;;
 			l)
 				RDP_Options="$RDP_Options /drives"
+				;;
+			n)
+				RDP_Options="$RDP_Options /printer"
 				;;
 			a)
 				RDP_Options="$RDP_Options /port:$OPTARG"
