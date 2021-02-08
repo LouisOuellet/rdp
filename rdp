@@ -53,6 +53,7 @@ help_options="
 -k                     => Enable Persist Mode which relaunches the prompt whenever you close your connection
 -n                     => Enable Printer Redirection
 -l                     => Enable Drives Redirection
+-g                     => Enable Hardware Acceleration
 -v                     => Enable Debug Mode
                           Input commands sent are stored in ${LOGDIR}
 -i                     => Install Script as Binary
@@ -301,27 +302,24 @@ function Remove(){
 # RUN OPTIONS & FUNCTIONS
 #==============================================================================
 
-#Execute Help if no parameters have been provided
-#if [ $# -eq 0 ]; then Display_Help; fi
-
 if [ "$0" != "./${scriptname}" ] && [ "$0" != "/usr/bin/${scriptname}" ];then
     FERROR "Script must be run from source folder or as binary."
 fi
 
 RDP_Options=
 
-while getopts ":virlknmd:a:u:p:h:" option
+while getopts ":virlkgnmd:a:u:p:h:" option
 	do
 	case "${option}"
 		in
       i)
-          Install
-					RUNNING='FALSE'
-          ;;
+        Install
+				RUNNING='FALSE'
+        ;;
       r)
-          Remove
-					RUNNING='FALSE'
-          ;;
+        Remove
+				RUNNING='FALSE'
+        ;;
 			v)
 				DEBUG=true
 				;;
@@ -346,6 +344,9 @@ while getopts ":virlknmd:a:u:p:h:" option
 			n)
 				RDP_Options="$RDP_Options /printer"
 				;;
+			g)
+				RDP_Options="$RDP_Options /gdi:hw"
+				;;
 			a)
 				RDP_Options="$RDP_Options /port:$OPTARG"
 				RDPPORT=$OPTARG
@@ -355,13 +356,13 @@ while getopts ":virlknmd:a:u:p:h:" option
 				;;
 			\? )
 				echo "Invalid option: $OPTARG" 1>&2
-                Display_Help
-                exit 0
+          Display_Help
+          exit 0
 				;;
 			: )
 				echo "Invalid option: $OPTARG requires an argument" 1>&2
-                Display_Help
-                exit 0
+          Display_Help
+          exit 0
 				;;
 	esac
 done
