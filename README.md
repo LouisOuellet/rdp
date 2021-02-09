@@ -23,7 +23,9 @@ Options:
 -d                     => Set Domain
 -h                     => Set Host
 -k                     => Enable Persist Mode which relaunches the prompt whenever you close your connection
+-n                     => Enable Printer Redirection
 -l                     => Enable Drives Redirection
+-g                     => Enable Hardware Acceleration
 -v                     => Enable Debug Mode
                           Input commands sent are stored in log/rdp/
 -i                     => Install Script as Binary
