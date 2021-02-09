@@ -74,6 +74,15 @@ chmod 755 /etc/X11/Xsession.d/startup-local
 
 *To run only when a specific user login, you will need to check the desktop environment documentation.
 
+### Run the script when a LXDE session is started (Pi4)
+
+```bash
+mkdir ~/.config/autostart
+cp Remote\ Desktop\ Connection.desktop ~/.config/autostart/rdp.desktop
+```
+
+Then you can edit the parameters (```Exec=rdp -mklng```) of the command using nano.
+
 ## Changlelog
 
  * [2020-10-01] - Added a persist switch that will specify the script to run in a loop. So whenever a session is closed, the script prompts the GUI again and launches the connection. If the host port is closed, the script will output an error in a dialog box. The OK button will continue the loop while the close button will stop it.

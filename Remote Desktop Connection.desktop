@@ -1,19 +1,5 @@
 [Desktop Entry]
-Comment[en_CA]=
-Comment=
-Exec=rdp -mkl
-GenericName[en_CA]=
-GenericName=
+Exec=rdp -mklng
 Icon=system-run
-MimeType=
-Name[en_CA]=Remote Desktop Connection
 Name=Remote Desktop Connection
-Path=
-StartupNotify=true
-Terminal=true
-TerminalOptions=
 Type=Application
-X-DBUS-ServiceName=
-X-DBUS-StartupType=none
-X-KDE-SubstituteUID=false
-X-KDE-Username=
