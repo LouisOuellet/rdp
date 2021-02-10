@@ -50,6 +50,7 @@ help_options="
 -p                     => Set Password
 -d                     => Set Domain
 -h                     => Set Host
+-o                     => Specify an openVPN connection to connect
 -k                     => Enable Persist Mode which relaunches the prompt whenever you close your connection
 -n                     => Enable Printer Redirection
 -l                     => Enable Drives Redirection
@@ -261,11 +262,13 @@ function Connect(){
 	fi
 	RDP_Options="$RDP_Options /v:$RHOST /u:$RUSER /p:$RPASS /d:$RDN"
 	if [ "$(nmap -Pn -p ${RDPPORT} ${RHOST} | grep "${RDPPORT}/tcp" | awk '{ print $2 }' 2>/dev/null)" = "open" ]; then
+		if [ "$VPNNAME" != "" ]; then sudo systemctl start openvpn@$VPNNAME; fi
 		if [ $DEBUG = "true" ]; then
 			Executing "xfreerdp /cert-ignore $RDP_Options"
 		else
 			Executing "xfreerdp /cert-ignore $RDP_Options >/dev/null 2>/dev/null"
 		fi
+		if [ "$VPNNAME" != "" ]; then sudo systemctl stop openvpn@$VPNNAME; fi
 	else
 		yad --fixed --borders=15 --width=600 --image dialog-question --title="Remote Desktop Connection Error" --text="${RHOST} is not accepting the connexion" --button=OK 2>/dev/null
 	fi
@@ -308,52 +311,24 @@ fi
 
 RDP_Options=
 
-while getopts ":virlkgnmd:a:u:p:h:" option
+while getopts ":virlkgnmd:a:u:p:h:o:" option
 	do
 	case "${option}"
 		in
-      i)
-        Install
-				RUNNING='FALSE'
-        ;;
-      r)
-        Remove
-				RUNNING='FALSE'
-        ;;
-			v)
-				DEBUG=true
-				;;
-			k)
-				PERSIST='TRUE'
-				;;
-			u)
-				RDPUSER=$OPTARG
-				;;
-			p)
-				RDPPASS=$OPTARG
-				;;
-			h)
-				RDPHOST=$OPTARG
-				;;
-			d)
-				RDPDN=$OPTARG
-				;;
-			l)
-				RDP_Options="$RDP_Options /drives"
-				;;
-			n)
-				RDP_Options="$RDP_Options /printer"
-				;;
-			g)
-				RDP_Options="$RDP_Options /gdi:hw"
-				;;
-			a)
-				RDP_Options="$RDP_Options /port:$OPTARG"
-				RDPPORT=$OPTARG
-				;;
-			m)
-				RDP_Options="$RDP_Options /multimon"
-				;;
+      i) Install;RUNNING='FALSE';;
+      r) Remove;RUNNING='FALSE';;
+			v) DEBUG=true;;
+			k) PERSIST='TRUE';;
+			u) RDPUSER=$OPTARG;;
+			p) RDPPASS=$OPTARG;;
+			h) RDPHOST=$OPTARG;;
+			d) RDPDN=$OPTARG;;
+			o) VPNNAME=$OPTARG;;
+			l) RDP_Options="$RDP_Options /drives";;
+			n) RDP_Options="$RDP_Options /printer";;
+			g) RDP_Options="$RDP_Options /gdi:hw";;
+			a) RDP_Options="$RDP_Options /port:$OPTARG";RDPPORT=$OPTARG;;
+			m) RDP_Options="$RDP_Options /multimon";;
 			\? )
 				echo "Invalid option: $OPTARG" 1>&2
           Display_Help
