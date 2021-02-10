@@ -267,7 +267,7 @@ function Connect(){
 			Executing "xfreerdp /cert-ignore $RDP_Options >/dev/null 2>/dev/null"
 		fi
 	else
-		yad --fixed --borders=15 --width=600 --image dialog-question --title="Remote Desktop Connection Error" --text="${RHOST} is not accepting the connexion" --button=Close:0 --button=OK 2>/dev/null
+		yad --fixed --borders=15 --width=600 --image dialog-question --title="Remote Desktop Connection Error" --text="${RHOST} is not accepting the connexion" --button=OK 2>/dev/null
 	fi
 }
 
@@ -381,7 +381,8 @@ if [ "$RUNNING" = "" ]; then
 			RUSER=
 			RPASS=
 			RDN=
-			Connect && break;
+			Connect;
+			# Connect && break;
 		done
 	fi
 fi

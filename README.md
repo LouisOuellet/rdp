@@ -78,10 +78,10 @@ chmod 755 /etc/X11/Xsession.d/startup-local
 
 ```bash
 mkdir ~/.config/autostart
-cp Remote\ Desktop\ Connection.desktop ~/.config/autostart/rdp.desktop
+cp rdp.desktop ~/.config/autostart/rdp.desktop
 ```
 
-Then you can edit the parameters (```Exec=rdp -mklng```) of the command using nano.
+Then you can edit the parameters (```Exec=lxterminal -e "rdp -mklng"```) of the command using nano.
 
 ## Changlelog
 

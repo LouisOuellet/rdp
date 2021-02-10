@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=Connect
+Exec=lxterminal -e "rdp -mklng"
