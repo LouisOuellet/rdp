@@ -260,9 +260,10 @@ function Connect(){
 	else
 		RHOST=$RDPHOST
 	fi
-	RDP_Options="$RDP_Options /v:$RHOST /u:$RUSER /p:$RPASS /d:$RDN"
-	if [ "$(nmap -Pn -p ${RDPPORT} ${RHOST} | grep "${RDPPORT}/tcp" | awk '{ print $2 }' 2>/dev/null)" = "open" ]; then
+	RIP=$(dig albcie.com a +yaml | yq eval -j | jq .[0].message.response_message_data.ANSWER_SECTION[0] | sed -e 's/"//g' | awk '{ print $5 }')
+	if [ "$(nmap -Pn -p ${RDPPORT} ${RIP} | grep "${RDPPORT}/tcp" | awk '{ print $2 }' 2>/dev/null)" = "open" ]; then
 		if [ "$VPNNAME" != "" ]; then sudo systemctl start openvpn@$VPNNAME; fi
+		RDP_Options="$RDP_Options /v:$RHOST /u:$RUSER /p:$RPASS /d:$RDN"
 		if [ $DEBUG = "true" ]; then
 			Executing "xfreerdp /cert-ignore $RDP_Options"
 		else
@@ -280,6 +281,9 @@ function Install(){
 			Check_Package zenity
 			Check_Package yad
 			Check_Package nmap
+			Check_Package jq
+			Check_Package snap
+			Executing "snap install yq"
       Executing "sudo mkdir -p $INSTDIR"
       Executing "sudo cp -R . $INSTDIR"
       Executing "sudo ln -s ${INSTDIR}${scriptname} $INSTBIN"
