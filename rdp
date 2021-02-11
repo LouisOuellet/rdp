@@ -263,7 +263,7 @@ function Connect(){
 	RIP=$(dig +short ${RHOST} | tail -n1)
 	if [ "$(nmap -Pn -p ${RDPPORT} ${RIP} | grep "${RDPPORT}/tcp" | awk '{ print $2 }' 2>/dev/null)" = "open" ]; then
 		if [ "$VPNNAME" != "" ]; then sudo systemctl start openvpn@$VPNNAME; fi
-		RDP_Options="$RDP_Options /v:$RHOST /u:$RUSER /p:$RPASS /d:$RDN"
+		RDP_Options="$RDP_Options /v:$RIP /u:$RUSER /p:$RPASS /d:$RDN"
 		if [ $DEBUG = "true" ]; then
 			Executing "xfreerdp /cert-ignore $RDP_Options"
 		else
