@@ -262,14 +262,14 @@ function Connect(){
 	fi
 	RIP=$(dig +short ${RHOST} | tail -n1)
 	if [ "$(nmap -Pn -p ${RDPPORT} ${RIP} | grep "${RDPPORT}/tcp" | awk '{ print $2 }' 2>/dev/null)" = "open" ]; then
-		if [ "$VPNNAME" != "" ]; then sudo systemctl start openvpn@$VPNNAME; fi
+		if [ "$VPNNAME" != "" ]; then sudo systemctl start openvpn@${VPNNAME}.service; fi
 		RDP_Options="$RDP_Options /v:$RIP /u:$RUSER /p:$RPASS /d:$RDN"
 		if [ $DEBUG = "true" ]; then
 			exec "xfreerdp /cert-ignore $RDP_Options"
 		else
 			exec "xfreerdp /cert-ignore $RDP_Options >/dev/null 2>/dev/null"
 		fi
-		if [ "$VPNNAME" != "" ]; then sudo systemctl stop openvpn@$VPNNAME; fi
+		if [ "$VPNNAME" != "" ]; then sudo systemctl stop openvpn@${VPNNAME}.service; fi
 	else
 		yad --fixed --borders=15 --width=600 --image dialog-question --title="Remote Desktop Connection Error" --text="${RHOST} is not accepting the connexion" --button=OK 2>/dev/null
 	fi
