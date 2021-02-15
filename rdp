@@ -19,7 +19,7 @@ scriptname=$(echo $0 | sed -e 's@.*/@@')
 # Date
 DATE=$(date +"%Y-%m-%d %H:%M:%S")
 
-# Debug Switch
+# dbg Switch
 DEBUG=false
 
 
@@ -55,7 +55,7 @@ help_options="
 -n                     => Enable Printer Redirection
 -l                     => Enable Drives Redirection
 -g                     => Enable Hardware Acceleration
--v                     => Enable Debug Mode
+-v                     => Enable dbg Mode
                           Input commands sent are stored in ${LOGDIR}
 -i                     => Install Script as Binary
 -r                     => Remove Installation
@@ -135,9 +135,9 @@ VAR="[ VAR ]"
 # Logger
 #==============================================================================
 
-function Display_Help(){
+function help(){
   if [ $DEBUG = "true" ]; then
-    echo "Help" | Debug i s
+    echo "Help" | dbg i s
   fi
   echo -e "
 Usage: $scriptname [options]
@@ -147,13 +147,13 @@ $help_options
 "
 }
 
-function FERROR(){
+function fatal(){
   printf "FATAL ERROR: $1\n"
-  Display_Help
+  help
   exit 0
 }
 
-function Debug(){
+function dbg(){
   if [ "$1" != "" ] && [ "$2" != "" ]; then
     case "$1" in
       info|i)
@@ -204,38 +204,38 @@ function Debug(){
       fi
     done
   else
-    FERROR "Missing Argument(s)"
+    fatal "Missing Argument(s)"
   fi
 }
 
-function Executing(){
+function exec(){
   if [ "$1" != "" ]; then
     if [ $DEBUG = "true" ]; then
-      echo "Executing $1" | Debug i s
-      if eval $1 2>&1 | Debug o o;then
-        echo "$1" | Debug s r
+      echo "exec $1" | dbg i s
+      if eval $1 2>&1 | dbg o o;then
+        echo "$1" | dbg s r
       else
-        echo "$1" | Debug e r
+        echo "$1" | dbg e r
       fi
     else
       eval $1
     fi
   else
-    FERROR "Missing Argument(s)"
+    fatal "Missing Argument(s)"
   fi
 }
 
-function Check_Package(){
+function pkg(){
   if [ "$1" != "" ]; then
     if [ $DEBUG = "true" ]; then
-      echo "Check_Package $1" | Debug i s
+      echo "pkg $1" | dbg i s
     fi
     if [ $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-      Executing "sudo apt-get update"
-      Executing "sudo apt-get install $1 -y"
+      exec "sudo apt-get update"
+      exec "sudo apt-get install $1 -y"
     fi
   else
-    FERROR "Missing Argument(s)"
+    fatal "Missing Argument(s)"
   fi
 }
 
@@ -265,9 +265,9 @@ function Connect(){
 		if [ "$VPNNAME" != "" ]; then sudo systemctl start openvpn@$VPNNAME; fi
 		RDP_Options="$RDP_Options /v:$RIP /u:$RUSER /p:$RPASS /d:$RDN"
 		if [ $DEBUG = "true" ]; then
-			Executing "xfreerdp /cert-ignore $RDP_Options"
+			exec "xfreerdp /cert-ignore $RDP_Options"
 		else
-			Executing "xfreerdp /cert-ignore $RDP_Options >/dev/null 2>/dev/null"
+			exec "xfreerdp /cert-ignore $RDP_Options >/dev/null 2>/dev/null"
 		fi
 		if [ "$VPNNAME" != "" ]; then sudo systemctl stop openvpn@$VPNNAME; fi
 	else
@@ -277,28 +277,28 @@ function Connect(){
 
 function Install(){
     if [ "$0" = "./${scriptname}" ];then
-			Check_Package freerdp2-x11
-			Check_Package zenity
-			Check_Package yad
-			Check_Package nmap
-      Executing "sudo mkdir -p $INSTDIR"
-      Executing "sudo cp -R . $INSTDIR"
-      Executing "sudo ln -s ${INSTDIR}${scriptname} $INSTBIN"
+			pkg freerdp2-x11
+			pkg zenity
+			pkg yad
+			pkg nmap
+      exec "sudo mkdir -p $INSTDIR"
+      exec "sudo cp -R . $INSTDIR"
+      exec "sudo ln -s ${INSTDIR}${scriptname} $INSTBIN"
     else
-      FERROR "Unable to track source directory"
+      fatal "Unable to track source directory"
     fi
 }
 
 function Remove(){
     if [ "$0" = "./${scriptname}" ] || [ "$0" = "/usr/bin/${scriptname}" ];then
         if [ -d $INSTDIR ] && [ -f $INSTBIN ];then
-            Executing "sudo rm -rf $INSTDIR"
-            Executing "sudo rm -f $INSTBIN"
+            exec "sudo rm -rf $INSTDIR"
+            exec "sudo rm -f $INSTBIN"
         else
-            FERROR "Script is not installed"
+            fatal "Script is not installed"
         fi
     else
-        FERROR "Unable to track source directory"
+        fatal "Unable to track source directory"
     fi
 }
 
@@ -307,7 +307,7 @@ function Remove(){
 #==============================================================================
 
 if [ "$0" != "./${scriptname}" ] && [ "$0" != "/usr/bin/${scriptname}" ];then
-    FERROR "Script must be run from source folder or as binary."
+    fatal "Script must be run from source folder or as binary."
 fi
 
 RDP_Options=
@@ -332,12 +332,12 @@ while getopts ":virlkgnmd:a:u:p:h:o:" option
 			m) RDP_Options="$RDP_Options /multimon";;
 			\? )
 				echo "Invalid option: $OPTARG" 1>&2
-          Display_Help
+          help
           exit 0
 				;;
 			: )
 				echo "Invalid option: $OPTARG requires an argument" 1>&2
-          Display_Help
+          help
           exit 0
 				;;
 	esac
