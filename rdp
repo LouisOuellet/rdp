@@ -281,6 +281,7 @@ function Install(){
 			pkg zenity
 			pkg yad
 			pkg nmap
+			pkg dnsutils
       exec "sudo mkdir -p $INSTDIR"
       exec "sudo cp -R . $INSTDIR"
       exec "sudo ln -s ${INSTDIR}${scriptname} $INSTBIN"
