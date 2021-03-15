@@ -311,7 +311,7 @@ if [ "$0" != "./${scriptname}" ] && [ "$0" != "/usr/bin/${scriptname}" ];then
     fatal "Script must be run from source folder or as binary."
 fi
 
-RDP_Options="/gfx:AVC444 -themes -fonts /multitransport /network:auto -bitmap-cache -glyph-cache /sound:sys:alsa,format:1,quality:high /rfx /gfx"
+RDP_Options="/gfx:AVC444 -themes"
 
 while getopts ":virlkgnmd:a:u:p:h:o:" option
 	do
