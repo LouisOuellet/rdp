@@ -311,7 +311,7 @@ if [ "$0" != "./${scriptname}" ] && [ "$0" != "/usr/bin/${scriptname}" ];then
     fatal "Script must be run from source folder or as binary."
 fi
 
-# RDP_Options="$RDP_Options /gfx:AVC444"
+RDP_Options="$RDP_Options /gfx:AVC444"
 RDP_Options="$RDP_Options -themes"
 
 while getopts ":virlkgnmd:a:u:p:h:o:" option
@@ -327,7 +327,12 @@ while getopts ":virlkgnmd:a:u:p:h:o:" option
 			h) RDPHOST=$OPTARG;;
 			d) RDPDN=$OPTARG;;
 			o) VPNNAME=$OPTARG;;
-			l) RDP_Options="$RDP_Options /drives";;
+			l)
+				if [ -d "/home/${USER}/PDF" ]; then
+					RDP_Options="$RDP_Options /drive:auto,* /drive:PDF,/home/${USER}/PDF";;
+				else
+					RDP_Options="$RDP_Options /drives";;
+				fi
 			n) RDP_Options="$RDP_Options /printer";;
 			g) RDP_Options="$RDP_Options /gdi:hw";;
 			a) RDP_Options="$RDP_Options /port:$OPTARG";RDPPORT=$OPTARG;;
