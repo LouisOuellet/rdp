@@ -329,10 +329,11 @@ while getopts ":virlkgnmd:a:u:p:h:o:" option
 			o) VPNNAME=$OPTARG;;
 			l)
 				if [ -d "/home/${USER}/PDF" ]; then
-					RDP_Options="$RDP_Options /drive:auto,* /drive:PDF,/home/${USER}/PDF";;
+					RDP_Options="$RDP_Options /drive:auto,* /drive:PDF,/home/${USER}/PDF"
 				else
-					RDP_Options="$RDP_Options /drives";;
+					RDP_Options="$RDP_Options /drives"
 				fi
+				;;
 			n) RDP_Options="$RDP_Options /printer";;
 			g) RDP_Options="$RDP_Options /gdi:hw";;
 			a) RDP_Options="$RDP_Options /port:$OPTARG";RDPPORT=$OPTARG;;
