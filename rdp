@@ -357,6 +357,9 @@ shift $((OPTIND -1))
 #==============================================================================
 
 if [ "$RUNNING" = "" ]; then
+  if [[ $RDP_Options != *"/multimon"* ]] && [[ $RDP_Options != *"/f"* ]]; then
+    RDP_Options="$RDP_Options /f"
+  fi
 	if [ "$PERSIST" = "" ]; then
 		Connect
 	else
