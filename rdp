@@ -260,9 +260,6 @@ function Connect(){
 	else
 		RHOST=$RDPHOST
 	fi
-  if [ $DEBUG = "true" ]; then
-    echo "${RHOST}"
-  fi
 	RIP=$(dig +short ${RHOST} | tail -n1)
 	if [ "$(nmap -p ${RDPPORT} ${RIP} | grep "${RDPPORT}/tcp" | awk '{ print $2 }' 2>/dev/null)" = "open" ]; then
 		if [ "$VPNNAME" != "" ]; then sudo systemctl start openvpn@${VPNNAME}.service; fi
