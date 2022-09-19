@@ -250,11 +250,7 @@ function Connect(){
 	else
 		RPASS=$RDPPASS
 	fi
-	if [ "$RDPDN" = "" ]; then
-		RDN=$(yad --fixed --borders=15 --width=400 --class="GSu" --title="Domain" --text="Enter domain" --entry --button=OK 2>/dev/null)
-	else
-		RDN=$RDPDN
-	fi
+	RDN="/d:$RDPDN"
 	if [ "$RDPHOST" = "" ]; then
 		RHOST="${RUSER}.${RDN}"
 	else
@@ -263,7 +259,7 @@ function Connect(){
 	RIP=$(dig +short ${RHOST} | tail -n1)
 	if [ "$(nmap -Pn -p ${RDPPORT} ${RIP} | grep "${RDPPORT}/tcp" | awk '{ print $2 }' 2>/dev/null)" = "open" ]; then
 		if [ "$VPNNAME" != "" ]; then sudo systemctl start openvpn@${VPNNAME}.service; fi
-		RDP_Options="$RDP_Options /v:$RIP /u:$RUSER /p:$RPASS /d:$RDN"
+		RDP_Options="$RDP_Options /v:$RIP /u:$RUSER /p:$RPASS $RDN"
 		if [ $DEBUG = "true" ]; then
 			exec "xfreerdp /cert-ignore $RDP_Options"
 		else
