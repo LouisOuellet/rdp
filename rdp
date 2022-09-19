@@ -250,7 +250,11 @@ function Connect(){
 	else
 		RPASS=$RDPPASS
 	fi
-	RDN="/d:$RDPDN"
+	if [ "$RDPDN" = "" ]; then
+		RDN="$RDPDN"
+	else
+		RDN="/d:$RDPDN"
+	fi
 	if [ "$RDPHOST" = "" ]; then
 		RHOST="${RUSER}.${RDN}"
 	else
