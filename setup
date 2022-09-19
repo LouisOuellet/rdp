@@ -3,3 +3,4 @@
 old="rdp -mklngd alb.com"
 new="rdp -mklngh vdi-01.albcie.com"
 sed -i "s/old-text/new-text/g" /home/pi/.bash_aliases
+bash rdp -i
